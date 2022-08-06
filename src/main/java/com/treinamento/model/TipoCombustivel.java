@@ -1,4 +1,4 @@
-package com.treinamento.movel;
+package com.treinamento.model;
 
 public enum TipoCombustivel {
 

@@ -1,9 +1,11 @@
-package com.treinamento.movel;
+package com.treinamento.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tab_veiculos")
@@ -35,21 +37,23 @@ public class Veiculo {
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
 
-    @Lob
-    @Column(name = "espedificações")
-    private String especificacoes;
-
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "cod_proprietario")
     private Proprietario proprietario;
 
-    //  @Lob
-    //private byte[]foto;
+    @ManyToMany
+    @JoinTable(name = "veiculo_acessorios",
+            joinColumns = @JoinColumn(name = "cod_veiculo"),
+            inverseJoinColumns = @JoinColumn(name = "cod_acessorio")
+    )
+    private Set<Acessorio> acessorios=new HashSet<>();
+
 
     public Veiculo() {
 
     }
 
-    public Veiculo(String fabricante, String modelo, Integer anoFabricacao, Integer anoModelo, Double valor, TipoCombustivel tipoCombustivel, Date dataCompra, LocalDate dataCadastro, String especificacoes, Proprietario proprietario) {
+    public Veiculo(String fabricante, String modelo, Integer anoFabricacao, Integer anoModelo, Double valor, TipoCombustivel tipoCombustivel, Date dataCompra, LocalDate dataCadastro, Proprietario proprietario) {
         this.fabricante = fabricante;
         this.modelo = modelo;
         this.anoFabricacao = anoFabricacao;
@@ -58,9 +62,22 @@ public class Veiculo {
         this.tipoCombustivel = tipoCombustivel;
         this.dataCompra = dataCompra;
         this.dataCadastro = dataCadastro;
-        this.especificacoes = especificacoes;
         this.proprietario = proprietario;
     }
+
+    public Veiculo(String fabricante, String modelo, Integer anoFabricacao, Integer anoModelo, Double valor, TipoCombustivel tipoCombustivel, Date dataCompra, LocalDate dataCadastro, Proprietario proprietario, Set<Acessorio> acessorios) {
+        this.fabricante = fabricante;
+        this.modelo = modelo;
+        this.anoFabricacao = anoFabricacao;
+        this.anoModelo = anoModelo;
+        this.valor = valor;
+        this.tipoCombustivel = tipoCombustivel;
+        this.dataCompra = dataCompra;
+        this.dataCadastro = dataCadastro;
+        this.proprietario = proprietario;
+        this.acessorios = acessorios;
+    }
+
 
     public String getFabricante() {
         return fabricante;
@@ -134,14 +151,6 @@ public class Veiculo {
         this.dataCadastro = dataCadastro;
     }
 
-    public String getEspecificacoes() {
-        return especificacoes;
-    }
-
-    public void setEspecificacoes(String especificacoes) {
-        this.especificacoes = especificacoes;
-    }
-
 
     public Proprietario getProprietario() {
         return proprietario;
@@ -150,6 +159,16 @@ public class Veiculo {
     public void setProprietario(Proprietario proprietario) {
         this.proprietario = proprietario;
     }
+
+    public Set<Acessorio> getAcessorios() {
+        return acessorios;
+    }
+
+    public void setAcessorios(Set<Acessorio> acessorios) {
+        this.acessorios = acessorios;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
